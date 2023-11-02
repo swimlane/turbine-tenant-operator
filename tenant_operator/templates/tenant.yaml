@@ -1,0 +1,10 @@
+apiVersion: swimlane.io/v1
+kind: Tenant
+metadata:
+  name: ""
+spec:
+  tenantId: ""
+  accountId: ""
+  tasksReplicas: 3
+  engineReplicas: 3
+  agentReplicas: 3

@@ -1,0 +1,67 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: turbine-agent
+  name: turbine-agent
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: turbine-agent
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: turbine-agent
+    spec:
+      containers:
+      - env:
+        - name: CONTAINER_ENGINE_URL
+          value: http://localhost:2375
+        - name: AGENT_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        envFrom:
+        - secretRef:
+            name: tenant-secrets
+            optional: false
+        image: swimlane/turbine-agent:latest
+        imagePullPolicy: Always
+        name: turbine-agent
+        securityContext: {}
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "4096Mi"
+          limits:
+            memory: "4096Mi"
+      - args:
+        - podman
+        - --log-level
+        - info
+        - system
+        - service
+        - tcp:0.0.0.0:2375
+        - -t=0
+        image: swimlane/turbine-container-engine
+        imagePullPolicy: Always
+        name: container-engine
+        securityContext:
+          privileged: true
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "4096Mi"
+          limits:
+            memory: "4096Mi"
+      topologySpreadConstraints:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: turbine-agent
+            tenant.swimlane.io/tenant-id: REPLACE_TENANT_ID
+        maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule

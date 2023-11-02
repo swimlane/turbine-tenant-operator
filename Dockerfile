@@ -1,18 +1,11 @@
-FROM node:18
+FROM python:3.10-slim-buster
+WORKDIR /src
 
-# Create app directory
-WORKDIR /usr/src/app
+ADD requirements.txt /src/
 
-# Install app dependencies
-# A wildcard is used to ensure both package.json AND package-lock.json are copied
-# where available (npm@5+)
-COPY package*.json ./
+RUN python -m pip install -r requirements.txt
 
-RUN npm install
-# If you are building your code for production
-# RUN npm ci --omit=dev
+COPY tenant_operator /src
+COPY tenant_operator/templates /templates
 
-# Bundle app source
-COPY src/ .
-
-CMD [ "node", "app.ts" ]
+CMD [ "/bin/sh", "-c", "kopf run tenant.py --verbose" ]

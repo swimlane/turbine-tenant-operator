@@ -1,0 +1,67 @@
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRole
+metadata:
+  name: swimlane-tenant-operator
+rules:
+- apiGroups: ["swimlane.io"]
+  resources: ["tenants"]
+  verbs: ["get", "list", "watch", "patch", "update", "create", "delete"]
+- apiGroups: ["*"]
+  resources: ["namespaces"]
+  verbs: ["create", "get", "list", "watch", "patch", "update", "delete"]
+- apiGroups: [""]
+  resources: ["pods"]
+  verbs: ["get", "list"]
+- apiGroups:
+  - "policy"
+  resources:
+  - "*"
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+  - patch
+- apiGroups:
+  - ""
+  resources:
+  - secrets
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+  - patch
+- apiGroups:
+  - apps
+  resources:
+  - deployments
+  verbs:
+  - create
+  - delete
+  - get
+  - list
+  - update
+  - watch
+  - patch
+# Framework: posting the events about the handlers progress/errors.
+- apiGroups: [""]
+  resources: [events]
+  verbs: [create]
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: ClusterRoleBinding
+metadata:
+  name: swimlane-tenant-operator
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: swimlane-tenant-operator
+subjects:
+- kind: ServiceAccount
+  name: swimlane-tenant-operator

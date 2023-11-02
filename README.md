@@ -1,1 +1,0 @@
-# turbine-tenant-operator

@@ -1,0 +1,13 @@
+apiVersion: swimlane.io/v1
+kind: Tenant
+metadata:
+  name: tenantbd98cc58-0792-4d34-ae65-46e772b656aa
+  labels:
+    tenant.swimlane.io/tenant-id: bd98cc58-0792-4d34-ae65-46e772b656aa
+    tenant.swimlane.io/account-id: 784d96c9-3ad5-4fcf-b7fb-071df5d0389a
+spec:
+  tenantId: bd98cc58-0792-4d34-ae65-46e772b656aa
+  accountId: 784d96c9-3ad5-4fcf-b7fb-071df5d0389a
+  tasksReplicas: 0
+  engineReplicas: 0
+  agentReplicas: 0

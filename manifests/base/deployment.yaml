@@ -1,0 +1,111 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: swimlane-tenant-operator
+spec:
+  selector:
+    matchLabels:
+      app: swimlane-tenant-operator
+  template:
+    metadata:
+      labels:
+        app: swimlane-tenant-operator
+    spec:
+      serviceAccountName: swimlane-tenant-operator
+      containers:
+      - name: swimlane-tenant-operator
+        image: quay.io/swimlane/swimlane-tenant-operator:0.1.0
+        imagePullPolicy: IfNotPresent
+        env:
+        # SWIMLANE_TENANT__IMAGE_TAG
+
+        # - name: SWIMLANE_Data__Mongo__SignalRConnectionString
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _mongo_mongo-signalr-connection-string
+        # - name: SWIMLANE_Data__Mongo__SwimlaneConnectionString
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _mongo_mongo-privileged-connection-string
+        # - name: SWIMLANE_Data__Mongo__HistoryConnectionString
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _mongo_mongo-privileged-connection-string
+        # - name: SWIMLANE_SystemUser__Password
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _swimlane_preshared-key
+        # - name: RABBITMQ_PASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _rabbitmq_rabbitmq-privileged-password
+        # - name: AMQP_URL
+        #   value: "amqp://turbine:$(RABBITMQ_PASSWORD)@rabbitmq.rabbitmq:5672"
+        # - name: SWIMLANE_Data__Mongo__TenantClusterConnectionString
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _mongo_mongo-privileged-connection-string
+        # - name: PGHOST
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _postgres_writer-endpoint
+        # - name: PGUSER
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _postgres_privileged-username
+        # - name: PGPASSWORD
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _postgres_privileged-password
+
+        # - name: SWIMLANE_Data__Postgresql__SwimlaneTenantConnectionString
+        #   value: Server=$(PGHOST);Port=5432;Database=SwimlaneTenant;User Id=$(PGUSER);Password=$(PGPASSWORD);Timeout=120;Pooling=true;MinPoolSize=10;MaxPoolSize=100;ConnectionIdleLifetime=300;
+        # - name: SWIMLANE_AlertCorrelation__PostgresqlConnection
+        #   value: "Server=$(PGHOST);Port=5432;Database=swimlane;User Id=$(PGUSER);Password=$(PGPASSWORD);Timeout=120;Pooling=true;MinPoolSize=10;MaxPoolSize=100;ConnectionIdleLifetime=300;"
+        # - name: SWIMLANE_Data__Postgresql__SwimlaneConnectionString
+        #   value: "Server=$(PGHOST);Port=5432;Database=swimlane;User Id=$(PGUSER);Password=$(PGPASSWORD);Timeout=120;Pooling=true;MinPoolSize=10;MaxPoolSize=100;ConnectionIdleLifetime=300;"       
+
+        # - name: SWIMLANE_SmtpConfiguration__Username
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _ses_ses-access-key
+        # - name: SWIMLANE_SmtpConfiguration__Password
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _ses_ses-security-key
+        # - name: SWIMLANE_SmtpConfiguration__Host
+        #   valueFrom:
+        #     secretKeyRef:
+        #       name: env-secrets
+        #       key: _ses_ses-endpoint
+        envFrom:
+        - configMapRef:
+            name: feature-flags
+            optional: true
+        - secretRef:
+            name: swimlane-tenant-operator
+            optional: true
+        - configMapRef:
+            name: swimlane-tenant-operator
+            optional: true
+        resources:
+          requests:
+            cpu: 100m
+            memory: 512Mi
+          limits:
+            memory: 512Mi
+        securityContext:
+          allowPrivilegeEscalation: false
+          readOnlyRootFilesystem: true

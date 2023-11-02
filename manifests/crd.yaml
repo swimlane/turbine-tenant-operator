@@ -1,0 +1,44 @@
+apiVersion: apiextensions.k8s.io/v1
+kind: CustomResourceDefinition
+metadata:
+  name: tenants.swimlane.io
+spec:
+  scope: Namespaced
+  group: swimlane.io
+  names:
+    kind: Tenant
+    plural: tenants
+    singular: tenant
+  versions:
+    - name: v1
+      served: true
+      storage: true
+      schema:
+        openAPIV3Schema:
+          type: object
+          properties:
+            spec:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true
+              properties:
+                tenantId:
+                  description: Unique Id of the tenant
+                  type: string
+                accountId:
+                  description: Unique Id of the account for the tenant
+                  type: string
+                tasksReplicas:
+                  description: Number of Replicas for swimlane-tasks
+                  type: integer
+                  format: int32
+                agentReplicas:
+                  description: Number of Replicas for turbine-agent
+                  type: integer
+                  format: int32
+                engineReplicas:
+                  description: Number of Replicas for turbine-engine
+                  type: integer
+                  format: int32
+            status:
+              type: object
+              x-kubernetes-preserve-unknown-fields: true

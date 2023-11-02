@@ -1,0 +1,49 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app.kubernetes.io/name: turbine-engine
+  name: turbine-engine
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: turbine-engine
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: turbine-engine
+    spec:
+      containers:
+      - env:
+        - name: ENGINE_NAME
+          valueFrom:
+            fieldRef:
+              apiVersion: v1
+              fieldPath: metadata.name
+        envFrom:
+        - secretRef:
+            name: tenant-secrets
+            optional: false
+        image: swimlane/turbine-engine
+        imagePullPolicy: Always
+        name: turbine-engine
+        resources:
+          requests:
+            cpu: "500m"
+            memory: "4096Mi"
+          limits:
+            memory: "4096Mi"
+      securityContext:
+        fsGroup: 3000
+        runAsGroup: 3000
+        runAsUser: 3000
+      topologySpreadConstraints:
+      - labelSelector:
+          matchLabels:
+            app.kubernetes.io/name: turbine-engine
+            tenant.swimlane.io/tenant-id: REPLACE_TENANT_ID
+        maxSkew: 1
+        topologyKey: topology.kubernetes.io/zone
+        whenUnsatisfiable: DoNotSchedule

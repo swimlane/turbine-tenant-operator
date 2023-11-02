@@ -1,0 +1,12 @@
+---
+apiVersion: policy/v1
+kind: PodDisruptionBudget
+metadata:
+  labels:
+    app.kubernetes.io/name: tenant-services
+  name: tenant-services
+spec:
+  maxUnavailable: 1
+  selector:
+    matchLabels:
+      tenant.swimlane.io/tenant-id: REPLACE_TENANT_ID
