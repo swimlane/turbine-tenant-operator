@@ -8,10 +8,10 @@ build:
 	$(MAKE) generate-kustomize
 
 generate-kustomize:
-	cat manifests/crds/*.yaml > ${APPLICATION_NAME}-${RELEASE_VERSION}.yaml
+	cat manifests/crds/*.yaml > ${APPLICATION_NAME}-${RELEASE_VERSION}-crds.yaml
 	kustomize build manifests/base/ \
 		| sed "s|${DOCKER_REPO}/${APPLICATION_NAME}|${DOCKER_REPO}/${APPLICATION_NAME}:${RELEASE_VERSION}|g"  \
-		>> ${APPLICATION_NAME}-${RELEASE_VERSION}.yaml
+		> ${APPLICATION_NAME}-${RELEASE_VERSION}.yaml
 
 test:
 	echo "Test"
