@@ -1,0 +1,29 @@
+---
+name: "Publish"
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        type: string
+        description: "Version String (Ex: '0.0.1')"
+        required: true
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    env: 
+      RELEASE_VERSION: ${{ inputs.version }}
+    steps:
+      - name: Docker Login
+        run: |
+          docker login quay.io -u ${{ secrets.QUAY_USERNAME }} -p "${{ secrets.QUAY_PASSWORD }}"
+
+      - name: Docker Push + Tag
+        run: |
+          make release
+
+      - name: Github Release
+        uses: softprops/action-gh-release@v1
+        with:
+          name: ${{ inputs.version }}

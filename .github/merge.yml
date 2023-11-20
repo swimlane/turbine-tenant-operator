@@ -1,0 +1,20 @@
+---
+name: "Build"
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Docker Login
+        run: |
+          docker login quay.io -u ${{ secrets.QUAY_USERNAME }} -p "${{ secrets.QUAY_PASSWORD }}"
+
+      - name: Publish Artifact
+        run: |
+          make build
+          make push
