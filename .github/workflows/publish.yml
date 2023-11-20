@@ -29,3 +29,5 @@ jobs:
         with:
           name: ${{ inputs.version }}
           tag_name: ${{ inputs.version }}
+          files:
+            turbine-tenant-operator-*.yaml
