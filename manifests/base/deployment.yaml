@@ -90,16 +90,6 @@ spec:
         #     secretKeyRef:
         #       name: env-secrets
         #       key: _ses_ses-endpoint
-        envFrom:
-        - configMapRef:
-            name: feature-flags
-            optional: true
-        - secretRef:
-            name: turbine-tenant-operator
-            optional: true
-        - configMapRef:
-            name: turbine-tenant-operator
-            optional: true
         resources:
           requests:
             cpu: 100m
