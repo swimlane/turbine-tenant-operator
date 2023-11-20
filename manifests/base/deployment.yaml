@@ -2,20 +2,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: swimlane-tenant-operator
+  name: turbine-tenant-operator
 spec:
   selector:
     matchLabels:
-      app: swimlane-tenant-operator
+      app: turbine-tenant-operator
   template:
     metadata:
       labels:
-        app: swimlane-tenant-operator
+        app: turbine-tenant-operator
     spec:
-      serviceAccountName: swimlane-tenant-operator
+      serviceAccountName: turbine-tenant-operator
       containers:
-      - name: swimlane-tenant-operator
-        image: quay.io/swimlane/swimlane-tenant-operator:0.1.0
+      - name: turbine-tenant-operator
+        image: quay.io/swimlane/turbine-tenant-operator:0.1.0
         imagePullPolicy: IfNotPresent
         env:
         # SWIMLANE_TENANT__IMAGE_TAG
@@ -95,10 +95,10 @@ spec:
             name: feature-flags
             optional: true
         - secretRef:
-            name: swimlane-tenant-operator
+            name: turbine-tenant-operator
             optional: true
         - configMapRef:
-            name: swimlane-tenant-operator
+            name: turbine-tenant-operator
             optional: true
         resources:
           requests:

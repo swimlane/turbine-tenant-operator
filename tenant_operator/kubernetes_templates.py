@@ -7,6 +7,7 @@ import kopf
 
 registry  = os.getenv("SWIMLANE_TENANT__IMAGE_REGISTRY", 'quay.io/')
 image_tag = os.getenv("SWIMLANE_TENANT__IMAGE_TAG", 'latest')
+on_prem   = os.getenv("SWIMLANE_FeatureManagement__OnPremInstall", 'False').lower() in ('true', '1', 't')
 
 def namespace_template(tenant_id, account_id):
 
@@ -17,7 +18,9 @@ def namespace_template(tenant_id, account_id):
         "tenant.swimlane.io/tenant-id": tenant_id,
        }
     )
-    kopf.adopt(resource)
+    # See tenant.delete_fn()
+    if on_prem:
+      kopf.adopt(resource)
     return resource
 
 def deployment_template(template, tenant_id, account_id, namespace, replicas):
@@ -49,7 +52,9 @@ def deployment_template(template, tenant_id, account_id, namespace, replicas):
         "tenant.swimlane.io/tenant-id": tenant_id,
        }
     )
-    kopf.adopt(resource)
+    # See tenant.delete_fn()
+    if on_prem:
+      kopf.adopt(resource)
 
     return resource
 
@@ -66,7 +71,9 @@ def pdb_template(tenant_id, account_id, namespace):
         "tenant.swimlane.io/tenant-id": tenant_id,
        }
     )
-    kopf.adopt(resource)
+    # See tenant.delete_fn()
+    if on_prem:
+      kopf.adopt(resource)
 
     return resource
 
@@ -82,7 +89,9 @@ def secret_template(tenant_id, account_id, namespace):
         "tenant.swimlane.io/tenant-id": tenant_id,
        }
     )
-    kopf.adopt(resource)
+    # See tenant.delete_fn()
+    if on_prem:
+      kopf.adopt(resource)
 
     # Get all SWIMLANE_ env vars from the operator and forward them to the
     # agent pods

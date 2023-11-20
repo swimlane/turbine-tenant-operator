@@ -28,7 +28,7 @@ spec:
                   description: Unique Id of the account for the tenant
                   type: string
                 tasksReplicas:
-                  description: Number of Replicas for swimlane-tasks
+                  description: Number of Replicas for turbine-tasks
                   type: integer
                   format: int32
                 agentReplicas:

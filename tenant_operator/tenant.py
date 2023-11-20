@@ -111,3 +111,21 @@ def create_fn(spec, **kwargs):
             "tenantServices": t_pdb["metadata"]["name"]
         }
     }
+
+# This is required in cloud because OwnerReferences
+# in Kubernetes do not support cross-namespace refs.
+# It was either this cleanup step, or have swimlane-tenant create+delete namespaces
+# For On-prem, the tenant are deployed in the same namespace and thus are cleaned up
+# automatically with OwnerReferences
+@kopf.on.delete('tenant')
+def delete_fn(spec, meta, **kwargs):
+    if not on_prem:
+        tenant_id  = spec.get("tenantId")
+        try:
+            client.CoreV1Api().delete_namespace(name="tenant"+tenant_id)
+        except ApiException as e:
+            if e.status == 404:
+                pass
+            else:
+                raise kopf.TemporaryError(e)
+    return {}
