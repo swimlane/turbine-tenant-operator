@@ -15,7 +15,7 @@ spec:
       serviceAccountName: turbine-tenant-operator
       containers:
       - name: turbine-tenant-operator
-        image: quay.io/swimlane/turbine-tenant-operator:0.1.0
+        image: quay.io/swimlane/turbine-tenant-operator
         imagePullPolicy: IfNotPresent
         env:
         # SWIMLANE_TENANT__IMAGE_TAG
