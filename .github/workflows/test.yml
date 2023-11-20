@@ -9,6 +9,8 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
+
       - name: Docker Login
         run: |
           docker login quay.io -u ${{ secrets.QUAY_USERNAME }} -p "${{ secrets.QUAY_PASSWORD }}"
@@ -20,3 +22,11 @@ jobs:
       - name: Docker Test
         run: |
           make test
+
+      - name: Lacework scan
+        uses: lacework/lw-scanner-action@v1.3.2
+        with:
+          LW_ACCOUNT_NAME: ${{ secrets.LW_ACCOUNT_NAME }}
+          LW_ACCESS_TOKEN: ${{ secrets.LW_ACCESS_TOKEN }}
+          IMAGE_NAME: localimage
+          IMAGE_TAG: localtag

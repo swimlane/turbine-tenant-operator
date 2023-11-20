@@ -10,6 +10,7 @@ jobs:
   merge:
     runs-on: ubuntu-latest
     steps:
+      - uses: actions/checkout@v3
       - name: Docker Login
         run: |
           docker login quay.io -u ${{ secrets.QUAY_USERNAME }} -p "${{ secrets.QUAY_PASSWORD }}"
