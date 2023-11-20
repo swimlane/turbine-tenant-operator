@@ -4,7 +4,7 @@ GIT_HASH ?= $(shell git log --format="%h" -n 1)
 RELEASE_VERSION ?= $(shell git log --format="%h" -n 1)
 
 build:
-	docker build --tag ${DOCKER_REPO}/${APPLICATION_NAME}:${GIT_HASH} .
+	docker build --tag localimage:localtag --tag ${DOCKER_REPO}/${APPLICATION_NAME}:${GIT_HASH} .
 
 test:
 	echo "Test"
