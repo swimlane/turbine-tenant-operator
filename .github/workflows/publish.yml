@@ -28,3 +28,4 @@ jobs:
         uses: softprops/action-gh-release@v1
         with:
           name: ${{ inputs.version }}
+          tag_name: ${{ inputs.version }}
