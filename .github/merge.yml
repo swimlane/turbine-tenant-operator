@@ -1,5 +1,5 @@
 ---
-name: "Build"
+name: "Merge"
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
       - main
 
 jobs:
-  build:
+  merge:
     runs-on: ubuntu-latest
     steps:
       - name: Docker Login
