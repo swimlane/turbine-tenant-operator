@@ -1,4 +1,8 @@
 FROM python:3.10-slim-buster
+
+RUN apt-get update \
+  && DEBIAN_FRONTEND=noninteractive apt-get upgrade -y
+
 WORKDIR /src
 
 ADD requirements.txt /src/
