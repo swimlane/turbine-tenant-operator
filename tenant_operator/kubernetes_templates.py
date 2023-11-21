@@ -41,6 +41,8 @@ def deployment_template(template, tenant_id, account_id, namespace, replicas):
     resource["spec"]["template"]["spec"]["containers"][0]["env"].append({ "name": "TENANT_ID", "value": tenant_id })
     resource["spec"]["template"]["spec"]["containers"][0]["env"].append({ "name": "SWIMLANE_Data__Mongo__TenantIdentifier", "value": tenant_id })
 
+    resource["spec"]["template"]["spec"]["containers"][0]["envFrom"][0]["name"] = "tenant-secrets-"+tenant_id
+
     kopf.adjust_namespace(resource, namespace=namespace, forced=True)
     kopf.label(resource, forced=True, labels={
         "tenant.swimlane.io/account-id": account_id,
@@ -81,7 +83,7 @@ def secret_template(tenant_id, account_id, namespace):
     with open(path.join(path.dirname(__name__), "/templates/secret.yaml")) as f:
       resource = yaml.safe_load(f)
 
-    resource["metadata"]["name"] = resource["metadata"]["name"]+"-"+tenant_id
+    resource["metadata"]["name"] = "tenant-secrets-"+tenant_id
 
     kopf.adjust_namespace(resource, namespace=namespace, forced=True)
     kopf.label(resource, forced=True, labels={
@@ -106,7 +108,7 @@ def secret_template(tenant_id, account_id, namespace):
     }
 
     # Merge the above env with the template's stringData
-    resource["stringData"] = resource["stringData"].update(env_subst)
+    resource["stringData"].update(env_subst)
 
     return resource
 

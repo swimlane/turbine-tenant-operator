@@ -28,7 +28,7 @@ spec:
         - secretRef:
             name: tenant-secrets
             optional: false
-        image: swimlane/turbine-agent:latest
+        image: swimlane/turbine-agent
         imagePullPolicy: Always
         name: turbine-agent
         securityContext: {}
