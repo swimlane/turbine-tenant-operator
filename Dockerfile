@@ -12,4 +12,4 @@ RUN python -m pip install -r requirements.txt
 COPY tenant_operator /src
 COPY tenant_operator/templates /templates
 
-CMD [ "/bin/sh", "-c", "kopf run tenant.py --verbose" ]
+CMD [ "/bin/sh", "-c", "kopf run tenant.py" ]
