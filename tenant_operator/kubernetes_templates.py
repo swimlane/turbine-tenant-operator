@@ -41,7 +41,7 @@ def deployment_template(template, tenant_id, account_id, namespace, replicas):
     resource["spec"]["template"]["spec"]["containers"][0]["env"].append({ "name": "TENANT_ID", "value": tenant_id })
     resource["spec"]["template"]["spec"]["containers"][0]["env"].append({ "name": "SWIMLANE_Data__Mongo__TenantIdentifier", "value": tenant_id })
 
-    resource["spec"]["template"]["spec"]["containers"][0]["envFrom"][0]["name"] = "tenant-secrets-"+tenant_id
+    resource["spec"]["template"]["spec"]["containers"][0]["envFrom"][0]["secretRef"]["name"] = "tenant-secrets-"+tenant_id
 
     kopf.adjust_namespace(resource, namespace=namespace, forced=True)
     kopf.label(resource, forced=True, labels={
