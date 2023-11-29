@@ -31,7 +31,9 @@ def create_fn(spec, **kwargs):
 
     t_pdb    = kubernetes_templates.pdb_template( tenant_id, account_id, namespace )
     t_secret = kubernetes_templates.secret_template( tenant_id, account_id, namespace )
-    t_tasks  = kubernetes_templates.deployment_template( "/templates/swimlane-tasks-deployment.yaml", tenant_id, account_id, namespace, spec.get("tasksReplicas")  )
+    
+    # swimlane-tasks was removed in 23.4
+    # t_tasks  = kubernetes_templates.deployment_template( "/templates/swimlane-tasks-deployment.yaml", tenant_id, account_id, namespace, spec.get("tasksReplicas")  )
     t_agent  = kubernetes_templates.deployment_template( "/templates/turbine-agent-deployment.yaml" , tenant_id, account_id, namespace, spec.get("agentReplicas")  )
     t_engine = kubernetes_templates.deployment_template( "/templates/turbine-engine-deployment.yaml", tenant_id, account_id, namespace, spec.get("engineReplicas") )
 
@@ -70,14 +72,14 @@ def create_fn(spec, **kwargs):
         else:
             raise kopf.TemporaryError(e)
 
-    try:
-        kapi.read_namespaced_deployment(name=t_tasks["metadata"]["name"], namespace=namespace)
-        kapi.replace_namespaced_deployment(name=t_tasks["metadata"]["name"], namespace=namespace, body=t_tasks)
-    except ApiException as e:
-        if e.status == 404:
-           kapi.create_namespaced_deployment(namespace=namespace, body=t_tasks)
-        else:
-            raise kopf.TemporaryError(e)
+    # try:
+    #     kapi.read_namespaced_deployment(name=t_tasks["metadata"]["name"], namespace=namespace)
+    #     kapi.replace_namespaced_deployment(name=t_tasks["metadata"]["name"], namespace=namespace, body=t_tasks)
+    # except ApiException as e:
+    #     if e.status == 404:
+    #        kapi.create_namespaced_deployment(namespace=namespace, body=t_tasks)
+    #     else:
+    #         raise kopf.TemporaryError(e)
 
     try:
         kapi.read_namespaced_deployment(name=t_agent["metadata"]["name"], namespace=namespace)
@@ -100,7 +102,7 @@ def create_fn(spec, **kwargs):
     return {
         'tenantNamespace': namespace,
         'deployments': {
-            "tasks": t_tasks["metadata"]["name"],
+            # "tasks": t_tasks["metadata"]["name"],
             "agent": t_agent["metadata"]["name"],
             "engine": t_engine["metadata"]["name"]
         },
